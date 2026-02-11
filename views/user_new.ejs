@@ -1,0 +1,60 @@
+<%- include("partials/header", { title: user.username + " Profile" }) %>
+
+<section class="profileCard">
+  <div class="profileLeft">
+    <div class="bigAvatar"><%= (user.name || "U").slice(0,1).toUpperCase() %></div>
+    <div>
+      <h1 class="pName"><%= user.name %></h1>
+      <div class="pUser">@<%= user.username %></div>
+      <p class="pBio"><%= user.bio && user.bio.trim() ? user.bio : "No bio yet." %></p>
+      <div class="pStats">
+        <span><strong><%= followers %></strong> followers</span>
+        <span><strong><%= following %></strong> following</span>
+      </div>
+    </div>
+  </div>
+
+  <% if (me && me.username !== user.username) { %>
+    <button class="btn primary" onclick="toggleFollow(<%= user.id %>, this)">
+      <%= isFollowing ? "Following" : "Follow" %>
+    </button>
+  <% } %>
+</section>
+
+<section class="feed">
+  <% posts.forEach(p => { %>
+    <article class="postCard reveal">
+      <div class="postHead">
+        <div class="postAvatar"><%= (user.name || "U").slice(0,1).toUpperCase() %></div>
+        <div class="postMeta">
+          <div class="postUser"><%= user.name %></div>
+          <div class="postHandle">@<%= user.username %></div>
+        </div>
+        <div class="postTime"><%= p.created_at %></div>
+      </div>
+
+      <div class="igCaption"><%= p.content %></div>
+
+      <% if (p.media_url && p.media_type === "image") { %>
+        <div class="igMedia">
+          <img src="<%= p.media_url %>" alt="post" loading="lazy"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/900x600?text=Image+Not+Found';" />
+        </div>
+      <% } %>
+
+      <% if (p.media_url && p.media_type === "video") { %>
+        <div class="igMedia">
+          <video controls muted playsinline>
+            <source src="<%= p.media_url %>" />
+          </video>
+        </div>
+      <% } %>
+
+      <div class="postActions">
+        <a class="actionBtn" href="/post/<%= p.id %>">View comments</a>
+      </div>
+    </article>
+  <% }) %>
+</section>
+
+<%- include("partials/footer") %>

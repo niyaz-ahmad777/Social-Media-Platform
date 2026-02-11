@@ -1,0 +1,82 @@
+<%- include("partials/header", { title: "Feed • MiniSocial" }) %>
+
+<section class="pageTitle">
+  <h1>Home Feed</h1>
+  <p class="muted">Share photos • Like • Comment • Follow people</p>
+</section>
+
+<section class="stories">
+  <div class="story">
+    <div class="ring"><span><%= (me.name || "U").slice(0,1).toUpperCase() %></span></div>
+    <small>You</small>
+  </div>
+  <div class="story"><div class="ring"><span>A</span></div><small>alex</small></div>
+  <div class="story"><div class="ring"><span>S</span></div><small>sara</small></div>
+  <div class="story"><div class="ring"><span>M</span></div><small>mike</small></div>
+  <div class="story"><div class="ring"><span>R</span></div><small>riya</small></div>
+</section>
+
+<section class="composer">
+  <div class="composerAvatar"><%= (me.name || "U").slice(0,1).toUpperCase() %></div>
+  <form class="composerForm" action="/post" method="POST">
+    <textarea name="content" rows="2" placeholder="Write a caption..."></textarea>
+
+    <div class="mediaRow">
+      <input name="media_url" placeholder="Paste Image/Video URL (optional)" />
+      <select name="media_type">
+        <option value="">None</option>
+        <option value="image">Image</option>
+        <option value="video">Video</option>
+      </select>
+    </div>
+
+    <div class="composerActions">
+      <span class="hint">Instagram-style: add image/video link + caption</span>
+      <button class="btn primary" type="submit">Share</button>
+    </div>
+  </form>
+</section>
+
+<section class="feed">
+  <% posts.forEach(p => { %>
+    <article class="postCard reveal">
+      <div class="postHead">
+        <div class="postAvatar"><%= (p.name || "U").slice(0,1).toUpperCase() %></div>
+        <div class="postMeta">
+          <a class="postUser" href="/u/<%= p.username %>"><%= p.name %></a>
+          <a class="postHandle" href="/u/<%= p.username %>">@<%= p.username %></a>
+        </div>
+        <div class="postTime"><%= p.created_at %></div>
+      </div>
+
+      <div class="igCaption"><%= p.content %></div>
+
+      <% if (p.media_url && p.media_type === "image") { %>
+        <div class="igMedia">
+          <img src="<%= p.media_url %>" alt="post" loading="lazy"
+            onerror="this.onerror=null;this.src='https://via.placeholder.com/900x600?text=Image+Not+Found';" />
+        </div>
+      <% } %>
+
+      <% if (p.media_url && p.media_type === "video") { %>
+        <div class="igMedia">
+          <video controls muted playsinline>
+            <source src="<%= p.media_url %>" />
+          </video>
+        </div>
+      <% } %>
+
+      <div class="postActions">
+        <button class="actionBtn" onclick="toggleLike(<%= p.id %>, this)">
+          <span class="likeIcon"><%= p.likedByMe ? "❤️" : "🤍" %></span>
+          <span class="likeCount"><%= p.likeCount %></span>
+        </button>
+
+        <a class="actionBtn" href="/post/<%= p.id %>">💬 <%= p.commentCount %></a>
+        <a class="actionBtn" href="/u/<%= p.username %>">➕ Follow</a>
+      </div>
+    </article>
+  <% }) %>
+</section>
+
+<%- include("partials/footer") %>

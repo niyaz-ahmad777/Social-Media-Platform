@@ -1,0 +1,64 @@
+<%- include("partials/header", { title: "Post • MiniSocial" }) %>
+
+<article class="postCard">
+  <div class="postHead">
+    <div class="postAvatar"><%= (post.name || "U").slice(0,1).toUpperCase() %></div>
+    <div class="postMeta">
+      <a class="postUser" href="/u/<%= post.username %>"><%= post.name %></a>
+      <a class="postHandle" href="/u/<%= post.username %>">@<%= post.username %></a>
+    </div>
+    <div class="postTime"><%= post.created_at %></div>
+  </div>
+
+  <div class="igCaption"><%= post.content %></div>
+
+  <% if (post.media_url && post.media_type === "image") { %>
+    <div class="igMedia">
+      <img src="<%= post.media_url %>" alt="post" loading="lazy"
+        onerror="this.onerror=null;this.src='https://via.placeholder.com/900x600?text=Image+Not+Found';" />
+    </div>
+  <% } %>
+
+  <% if (post.media_url && post.media_type === "video") { %>
+    <div class="igMedia">
+      <video controls muted playsinline>
+        <source src="<%= post.media_url %>" />
+      </video>
+    </div>
+  <% } %>
+
+  <div class="postActions">
+    <button class="actionBtn" onclick="toggleLike(<%= post.id %>, this)">
+      <span class="likeIcon"><%= post.likedByMe ? "❤️" : "🤍" %></span>
+      <span class="likeCount"><%= post.likeCount %></span>
+    </button>
+    <a class="actionBtn" href="/feed">⬅ Back</a>
+  </div>
+</article>
+
+<section class="box" style="margin-top:12px;">
+  <h3 style="margin:0 0 10px;">Comments</h3>
+
+  <form action="/comment/<%= post.id %>" method="POST" style="display:flex;gap:10px;flex-wrap:wrap;">
+    <input name="content" placeholder="Write a comment..." required style="flex:1;min-width:220px;" />
+    <button class="btn primary" type="submit">Post</button>
+  </form>
+
+  <div class="commentList" style="margin-top:12px;">
+    <% if (!comments || comments.length === 0) { %>
+      <p class="muted">No comments yet.</p>
+    <% } %>
+
+    <% (comments || []).forEach(c => { %>
+      <div class="comment">
+        <div>
+          <a href="/u/<%= c.username %>" style="font-weight:800;">@<%= c.username %></a>
+          <span class="muted"> • <%= c.created_at %></span>
+        </div>
+        <div style="margin-top:6px;"><%= c.content %></div>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

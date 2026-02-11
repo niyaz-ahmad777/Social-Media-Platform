@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= title || "MiniSocial" %></title>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="/feed">MiniSocial</a>
+
+  <div class="search">
+    <input placeholder="Search users... (demo)" />
+  </div>
+
+  <nav class="top-actions">
+    <% if (me) { %>
+      <a class="chip" href="/feed">Home</a>
+      <a class="chip" href="/me">Profile</a>
+      <form action="/logout" method="POST">
+        <button class="chip danger" type="submit">Logout</button>
+      </form>
+    <% } else { %>
+      <a class="chip" href="/login">Login</a>
+      <a class="chip primary" href="/register">Register</a>
+    <% } %>
+  </nav>
+</header>
+
+<div class="layout">
+  <% if (me) { %>
+  <aside class="sidebar">
+    <div class="meCard">
+      <div class="avatar"><%= (me.name || "U").slice(0,1).toUpperCase() %></div>
+      <div>
+        <div class="meName"><%= me.name %></div>
+        <div class="meUser">@<%= me.username %></div>
+      </div>
+    </div>
+
+    <a class="sideLink" href="/feed">🏠 Feed</a>
+    <a class="sideLink" href="/me">👤 My Profile</a>
+
+    <div class="sideBox">
+      <h4>Tips</h4>
+      <p>Post daily • Follow people • Engage with comments</p>
+    </div>
+  </aside>
+  <% } %>
+
+  <main class="main">

@@ -1,0 +1,17 @@
+.profileCard{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:18px;
+  border:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+  border-radius:18px;padding:24px;margin-bottom:18px;
+}
+.profileLeft{display:flex;gap:16px;align-items:flex-start;flex:1}
+.bigAvatar{
+  width:80px;height:80px;border-radius:14px;
+  background:linear-gradient(135deg, rgba(255,45,85,1), rgba(168,85,247,1));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:28px;flex-shrink:0;
+}
+.pName{margin:0 0 4px;font-size:24px}
+.pUser{color:var(--muted);font-size:14px;margin-bottom:8px}
+.pBio{margin:0 0 12px;line-height:1.5;font-size:15px}
+.pStats{display:flex;gap:18px;color:var(--muted);font-size:13px}
+.pStats strong{color:var(--text);font-weight:800}
